@@ -15,7 +15,7 @@ async function login() {
         console.log(personData);
     }
 
-    window.location.href="/home.html";
+    // window.location.href="/home.html";
 }
 
 function go() {
