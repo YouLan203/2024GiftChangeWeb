@@ -49,7 +49,7 @@ server.get("/getUserSelect", async(req, res) => {
     try {
         const [client, list] = await connectDB("PeopleList");
 
-        const search = 'lanangel';
+        const search = req.query.user;
         const query = { user: search };
         const person = await list.findOne(query);
         await client.close();
