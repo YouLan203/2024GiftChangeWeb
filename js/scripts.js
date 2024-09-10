@@ -3,8 +3,8 @@ function signJump() {
 }
 
 async function login() {
-    const user = document.getElementById("username");
-    const password = document.getElementById("password");
+    const user = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
     console.log(user, password);
     if (user != "" && password != "") {
         const url = 'https://2024-gift-change-web.vercel.app' + '/getUserSelect?user=${user}&password=${password}';
@@ -15,7 +15,7 @@ async function login() {
         console.log(personData);
     }
 
-    // window.location.href="/home.html";
+    window.location.href="/home.html";
 }
 
 function go() {
