@@ -5,7 +5,7 @@ function signJump() {
 async function login() {
     const user = document.getElementById("username");
     const password = document.getElementById("password");
-
+    console.log(user, password);
     if (user != "" && password != "") {
         const url = 'https://2024-gift-change-web.vercel.app' + '/getUserSelect?user=${user}&password=${password}';
         const res = await fetch(url, {
