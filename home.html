@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <script type="text/javascript" src="js/scripts.js"></script><!--導入JS文件-->
     <title>2024 交換禮物大作戰_個人資料</title>
 </head>
+
 <body>
     <header>
         <h1>2024 聖誕交換禮物大作戰!!!╰(*°▽°*)╯</h1>
@@ -31,6 +33,21 @@
                     <button type="submit" class="save" onclick="save()">保存</button>
                 </form>
             </div>
+            <script>
+                const personData = JSON.parse(sessionStorage.getItem('personData'));
+                if (personData) {
+                    document.getElementById("username").value = personData.user;
+                    document.getElementById("password").value = personData.password;
+                    document.getElementById("id").value = personData.nickname;
+                    document.getElementById("localNum").value = personData.postCode;
+                    document.getElementById("address").value = personData.address;
+                    document.getElementById("name").value = personData.name;
+                    document.getElementById("phoneNum").value = personData.phone;
+                } else {
+                    // 如果 personData 不存在，重定向回登入頁面
+                    window.location.href = "/index.html";
+                }
+            </script>
             <div class="right">
                 <h2>以下為收禮對象的資料，請在時間內寄出！</h2>
                 <p>暱稱：(尚未開抽)</p>
@@ -50,4 +67,5 @@
         <a href="index.html">回首頁</a>
     </footer>
 </body>
+
 </html>

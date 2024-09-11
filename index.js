@@ -4,7 +4,7 @@ const server = express();
 // 預設 port
 const port = process.env.PORT || 3000
 
-require('dotenv').config()
+require('dotenv').config();
 
 server.use('/',express.static('.')); //將整個server資料夾放到server上的/路徑
 server.use('/image', express.static(__dirname + '/image')); //只將某資料夾放到server上
@@ -21,7 +21,6 @@ server.get('/', (req, res) => {
 server.listen(port, () => console.log(`Listening on ${port}`))
 
 const uri = process.env.DB_Password;
-// const uri = "mongodb+srv://lanangel33:WA5gVgjUWHD95JFE@una.4ecdo.mongodb.net/?retryWrites=true&w=majority&appName=Una";
 
 async function connectDB(DB) {
     const { MongoClient, ServerApiVersion } = require('mongodb');

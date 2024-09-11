@@ -14,7 +14,7 @@ async function run() {
     const list = database.collection('PeopleList');
 
     const search = 'lanangel';
-    const query = { user: 'lanangel' };
+    const query = { user: search };
     const person = await list.findOne(query);
 
     // const num = person.num.charCodeAt(); //轉換ASCII Code
