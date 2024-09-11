@@ -1,5 +1,4 @@
-//const urlHeader = "http://localhost:3000"
-const urlHeader = "https://2024-gift-change-web-youlan203s-projects.vercel.app"
+const urlHeader = "."
 
 function signJump() {
     window.location.href = "/signUp.html";
