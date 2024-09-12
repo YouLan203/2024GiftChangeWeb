@@ -13,7 +13,7 @@ async function login() {
         const res = await fetch(url, {
             method: 'GET',
         })
-        const personData = await res.json()
+        const personData = await res.json();
         if (personData != null) {
             const passwordCheck = personData.password;
             if (passwordCheck == password) {
@@ -31,8 +31,6 @@ async function login() {
 
         }
     }
-
-    // window.location.href="/home.html";
 }
 
 
@@ -45,6 +43,51 @@ function save() {
     window.alert("保存成功！");
 }
 
-function build() {
-    window.alert("註冊成功！");
+async function build() {
+    const user = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const nickname = document.getElementById("id").value;
+    const postCode = document.getElementById("localNum").value;
+    const address = document.getElementById("address").value;
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phoneNum").value;
+
+    if (user != "" && password != "") {
+        const url = urlHeader + '/signUpUser';
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        const body = {
+            "user": user,
+            "password": password,
+            "nickname": nickname,
+            "postCode": postCode,
+            "address": address,
+            "name": name,
+            "phone": phone
+        }
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body)
+        })
+        const insertResult = await res.json();
+        // console.log(typeof(insertResult.acknowledged));
+        if (insertResult.acknowledged == true) {
+            const url = urlHeader + `/getUserSelect?user=${user}`;
+            const res = await fetch(url, {
+                method: 'GET',
+            })
+            const personData = await res.json();
+            sessionStorage.setItem('personData', JSON.stringify(personData));
+            window.location.href = "/home.html";
+            window.alert("註冊成功！");
+        }
+        else{
+            window.alert("註冊失敗！請重新嘗試或聯絡管理員。");
+            window.location.href = "/signUp.html";
+        }
+        
+    }
 }

@@ -5,7 +5,10 @@ const server = express();
 const port = process.env.PORT || 3000
 
 require('dotenv').config();
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+server.use(express.json());
 server.use('/',express.static('.')); //將整個server資料夾放到server上的/路徑
 server.use('/image', express.static(__dirname + '/image')); //只將某資料夾放到server上
 server.use('/css', express.static(__dirname + '/css'));
@@ -55,6 +58,34 @@ server.get("/getUserSelect", async(req, res) => {
         const person = await list.findOne(query);
         await client.close();
         return res.status(200).json(person);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+
+})
+
+server.post("/signUpUser", urlencodedParser, async(req, res) => {
+    try {
+        const [client, list] = await connectDB("PeopleList");
+        
+        const num = await list.countDocuments(); //抓取目前資料筆數
+        const newNum = String.fromCharCode(num+64); //資料比數+64轉換成字母
+        const user = req.body.user;
+        const password = req.body.password;
+        const nickname = req.body.nickname;
+        const postCode = req.body.postCode;
+        const address = req.body.address;
+        const name = req.body.name;
+        const phone = req.body.phone;
+        const gift = false;
+        const get = "";
+
+        const query = { num: newNum, user: user, password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, get: get, gift: gift};
+        const insertResult = await list.insertOne(query);
+        await client.close();
+        return res.status(200).json(insertResult);
     } catch (error) {
         return res.status(500).json({
             result: null
