@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Stick&display=swap&family=Zen+Maru+Gothic:wght@300;400;500;700;900&family=DotGothic16&family=Klee+One:wght@400;600&family=Yusei+Magic&&family=Zen+Old+Mincho:wght@400;500;600;700;900');
+html {
+    font-family: 'Klee One', sans-serif;/*字體*/
+    background-image: url('/image/background.png'); /*背景圖片*/
+    background-size: cover;
+  }
+
+body {
+    width: 1000px; /*寬度*/
+    margin: 0 auto; /*頂部、左右側（auto自動均分）*/
+    padding: 40px 20px 20px 20px; /*設定邊界*/
+}
+
+h1 {
+    font-family: 'DotGothic16', sans-serif;/*字體*/
+    margin: 0;
+    font-size: 44px;
+    line-height: 20px;
+    text-align: center;
+    padding: 20px 20px;
+    color: #6bb8ff;
+}
+
+h2{
+    font-size: 20px;
+    text-align: left;
+    line-height: 50px;
+}
+
+h3{
+    font-size: 18px;
+    text-align: center;
+    line-height: 10px;
+}
+
+.data, .goGift{
+    margin: 0 auto;
+    width: 100%;
+}
+
+.clear{
+    clear: both;
+}
+
+.left{
+    float: left;
+    font-size: 20px;
+    line-height: 20px;
+    width: 45%;
+    
+}
+
+.right{
+    float: right;
+    font-size: 20px;
+    line-height: 20px;
+    width: 45%;
+}
+
+input{
+    height: 25px;
+    width: 70%;
+    float: right;
+    position:relative;
+    top: -3px;
+}
+
+.save{
+    font-family: 'DotGothic16', sans-serif;/*字體*/
+    font-size: 20px;
+    width: 80px;
+    height: 40px;
+    margin-left: 82%;
+}
+
+.go{
+    margin-left: 46%;
+    font-family: 'Zen Maru Gothic', sans-serif;/*字體*/
+    font-size: 32px;
+    color: #e51212;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+footer{
+    position: absolute;
+    bottom: 20px;
+    text-align: left;
+}
