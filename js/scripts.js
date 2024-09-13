@@ -53,41 +53,52 @@ async function build() {
     const phone = document.getElementById("phoneNum").value;
 
     if (user != "" && password != "") {
-        const url = urlHeader + '/signUpUser';
-        const headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
-        const body = {
-            "user": user,
-            "password": password,
-            "nickname": nickname,
-            "postCode": postCode,
-            "address": address,
-            "name": name,
-            "phone": phone
-        }
+        const url = urlHeader + `/getUserSelect?user=${user}`;
         const res = await fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(body)
+            method: 'GET',
         })
-        const insertResult = await res.json();
-        // console.log(typeof(insertResult.acknowledged));
-        if (insertResult.acknowledged == true) {
-            const url = urlHeader + `/getUserSelect?user=${user}`;
-            const res = await fetch(url, {
-                method: 'GET',
-            })
-            const personData = await res.json();
-            sessionStorage.setItem('personData', JSON.stringify(personData));
-            window.location.href = "/home.html";
-            window.alert("註冊成功！");
+        const personData = await res.json();
+        if (personData != null){
+            window.alert("帳號已存在，請重新設定。");
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
         }
         else{
-            window.alert("註冊失敗！請重新嘗試或聯絡管理員。");
-            window.location.href = "/signUp.html";
+            const url = urlHeader + '/signUpUser';
+            const headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+            const body = {
+                "user": user,
+                "password": password,
+                "nickname": nickname,
+                "postCode": postCode,
+                "address": address,
+                "name": name,
+                "phone": phone
+            }
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            })
+            const insertResult = await res.json();
+            // console.log(typeof(insertResult.acknowledged));
+            if (insertResult.acknowledged == true) {
+                const url = urlHeader + `/getUserSelect?user=${user}`;
+                const res = await fetch(url, {
+                    method: 'GET',
+                })
+                const personData = await res.json();
+                sessionStorage.setItem('personData', JSON.stringify(personData));
+                window.location.href = "/home.html";
+                window.alert("註冊成功！");
+            }
+            else {
+                window.alert("註冊失敗！請重新嘗試或聯絡管理員。");
+                window.location.href = "/signUp.html";
+            }
         }
-        
     }
 }
