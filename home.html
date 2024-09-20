@@ -30,13 +30,14 @@
                     <p>收件人名字：<input type="text" id="name" placeholder="收件人名字(未填則以暱稱郵寄)"></p>
                     <p>手機號碼：<input type="text" id="phoneNum" placeholder="手機號碼(外地請寫+886或+852等開頭)"></p>
                     <p>禮物上傳：<input type="file" id="giftCheck" accept="image/*"></p>
-                    <button type="submit" class="save" onclick="save()">保存</button>
+                    <button type="button" class="save" onclick="save()">保存</button>
                 </form>
             </div>
             <script>
                 const personData = JSON.parse(sessionStorage.getItem('personData'));
                 if (personData) {
                     document.getElementById("username").value = personData.user;
+                    document.getElementById("username").readOnly = true;
                     document.getElementById("password").value = personData.password;
                     document.getElementById("id").value = personData.nickname;
                     document.getElementById("localNum").value = personData.postCode;
