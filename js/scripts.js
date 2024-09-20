@@ -84,6 +84,9 @@ async function save() {
             })
             const updateResult = await res.json();
             console.log(updateResult);
+            if(updateResult.acknowledged == true){
+                window.alert("保存成功！");
+            }
         }
     }
     else {
@@ -109,8 +112,11 @@ async function save() {
         })
         const updateResult = await res.json();
         console.log(updateResult);
+        if(updateResult.acknowledged == true){
+            window.alert("保存成功！");
+        }
     }
-    // window.alert("保存成功！");
+    
 }
 
 async function build() {
