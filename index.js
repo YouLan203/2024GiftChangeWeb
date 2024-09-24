@@ -172,7 +172,7 @@ server.get("/getGift", async (req, res) => {
         const [client, list] = await connectDB("PeopleList");
 
         const num = await list.countDocuments(); //抓取目前資料筆數
-        const giftArr = new Array();
+        var giftArr = new Array();
         for (let i = 0; i < num - 1; i++) {
             const search = String.fromCharCode(i + 65); //尋找該編號資料
             const query = { num: search };

@@ -48,7 +48,7 @@ async function save() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phoneNum").value;
     const file = document.getElementById("giftCheck");
-    const gift = true;
+    let gift = true;
 
     const giftFile = file.files[0];
     if (!giftFile) {
@@ -91,7 +91,7 @@ async function save() {
     }
     else {
         const url = urlHeader + '/updateUser';
-        const formData = new FormData();
+        var formData = new FormData();
 
         // 將普通字段添加到 FormData
         formData.append("user", user);
