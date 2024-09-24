@@ -91,6 +91,23 @@ server.get("/getUserSelect", async (req, res) => {
 
 })
 
+server.get("/getNumSelect", async (req, res) => {
+    try {
+        const [client, list] = await connectDB("PeopleList");
+
+        const search = req.query.num;
+        const query = { num: search };
+        const person = await list.findOne(query);
+        await client.close();
+        return res.status(200).json(person);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+
+})
+
 server.post("/signUpUser", urlencodedParser, async (req, res) => {
     try {
         const [client, list] = await connectDB("PeopleList");
@@ -106,8 +123,9 @@ server.post("/signUpUser", urlencodedParser, async (req, res) => {
         const phone = req.body.phone;
         const gift = false;
         const get = "";
+        const hasGone = false;
 
-        const query = { num: newNum, user: user, password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, get: get, gift: gift };
+        const query = { num: newNum, user: user, password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, get: get, gift: gift, hasGone: hasGone };
         const insertResult = await list.insertOne(query);
         await client.close();
         return res.status(200).json(insertResult);
@@ -119,10 +137,10 @@ server.post("/signUpUser", urlencodedParser, async (req, res) => {
 
 })
 
-server.post("/updateUser",  urlencodedParser, upload.single('file'), async (req, res) => {
+server.post("/updateUser", urlencodedParser, upload.single('file'), async (req, res) => {
     try {
         const [client, list] = await connectDB("PeopleList");
-        
+
         const user = req.body.user;
         const password = req.body.password;
         const nickname = req.body.nickname;
@@ -149,4 +167,33 @@ server.post("/updateUser",  urlencodedParser, upload.single('file'), async (req,
 
 });
 
+server.get("/getGift", async (req, res) => {
+    try {
+        const [client, list] = await connectDB("PeopleList");
 
+        const num = await list.countDocuments(); //抓取目前資料筆數
+        const giftArr = new Array();
+        for (let i = 0; i < num - 1; i++) {
+            const search = String.fromCharCode(i + 65); //尋找該編號資料
+            const query = { num: search };
+            const person = await list.findOne(query);
+            if (!person.hasGone) { //如果該編號還沒被抽中
+                giftArr[i] = String.fromCharCode(i + 65); //加入未抽中名單中
+            }
+        }
+        await client.close();
+
+
+        let x = Math.floor(Math.random() * giftArr.length); //隨機取值
+        /*這裡需要寫入更改資料庫資料的東東*/
+        // console.log(giftArr[x]);
+        giftArr.splice(x,1); //將已被抽中的刪掉(其實好像可以不需要)
+        console.log(giftArr);
+        return res.status(200).json(giftArr);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+
+})

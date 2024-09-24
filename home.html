@@ -21,7 +21,7 @@
         <div class="data">
             <div class="left">
                 <h2>以下個人資料如需修改可直接修正，記得按保存~</h2>
-                <form id="loginForm" action="home.html">
+                <form id="loginForm">
                     <p>帳號：<input type="text" id="username" placeholder="帳號"></p>
                     <p>密碼：<input type="text" id="password" placeholder="密碼"></p>
                     <p>暱稱：<input type="text" id="id" placeholder="暱稱"></p>
@@ -32,6 +32,8 @@
                     <p>禮物上傳：<input type="file" id="giftCheck" accept="image/*"></p>
                     <button type="button" class="save" onclick="save()">保存</button>
                 </form>
+            </div>
+            <div class="right" id="right">
             </div>
             <script>
                 const personData = JSON.parse(sessionStorage.getItem('personData'));
@@ -44,19 +46,29 @@
                     document.getElementById("address").value = personData.address;
                     document.getElementById("name").value = personData.name;
                     document.getElementById("phoneNum").value = personData.phone;
+
+                    const check = personData.get;
+                    if (check != "") {
+                        async function showData() {
+                            const url = urlHeader + `/getNumSelect?num=${check}`;
+                            const res = await fetch(url, {
+                                method: 'GET',
+                            })
+                            const giftData = await res.json();
+                            const right = document.getElementById('right');
+                            right.innerHTML = '<h2>以下為收禮對象的資料，請在時間內寄出！</h2><p>暱稱：' + giftData.nickname + '</p><p>郵遞區號：' + giftData.postCode + '</p><p>地址：' + giftData.address + '</p><p>收件人名字：' + giftData.name + '</p><p>手機號碼：' + giftData.phone + '</p>';
+                        }
+                        showData();
+                    }
+                    else {
+                        const right = document.getElementById('right');
+                        right.innerHTML = '<h2>以下為收禮對象的資料，請在時間內寄出！</h2><p>暱稱：(尚未開抽)</p><p>郵遞區號：(尚未開抽)</p><p>地址：(尚未開抽)</p><p>收件人名字：(尚未開抽)</p><p>手機號碼：(尚未開抽)</p>';
+                    }
                 } else {
                     // 如果 personData 不存在，重定向回登入頁面
                     window.location.href = "/index.html";
                 }
             </script>
-            <div class="right">
-                <h2>以下為收禮對象的資料，請在時間內寄出！</h2>
-                <p>暱稱：(尚未開抽)</p>
-                <p>郵遞區號：(尚未開抽)</p>
-                <p>地址：(尚未開抽)</p>
-                <p>收件人名字：(尚未開抽)</p>
-                <p>手機號碼：(尚未開抽)</p>
-            </div>
         </div>
         <div class="clear"></div>
         <div class="goGift">
