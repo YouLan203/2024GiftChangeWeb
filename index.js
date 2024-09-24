@@ -149,10 +149,9 @@ server.post("/updateUser", urlencodedParser, upload.single('file'), async (req, 
         const name = req.body.name;
         const phone = req.body.phone;
         const gift = Boolean(req.body.gift);
-        const get = "";
 
         const search = { user: user };
-        const query = { $set: { password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, get: get, gift: gift } };
+        const query = { $set: { password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, gift: gift } };
         const updateResult = await list.updateOne(search, query);
         await client.close();
 

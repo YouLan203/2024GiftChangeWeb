@@ -48,7 +48,6 @@ async function save() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phoneNum").value;
     const file = document.getElementById("giftCheck");
-    let gift = true;
 
     const giftFile = file.files[0];
     if (!giftFile) {
@@ -59,9 +58,34 @@ async function save() {
         const personData = await res.json();
         const check = personData.gift;
         if (!check){
-            gift = false;
+            const url = urlHeader + '/updateUser';
+            const headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+            const body = {
+                "user": user,
+                "password": password,
+                "nickname": nickname,
+                "postCode": postCode,
+                "address": address,
+                "name": name,
+                "phone": phone,
+                "gift": false
+            }
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            })
+            const updateResult = await res.json();
+            console.log(updateResult);
+            if(updateResult.acknowledged == true){
+                window.alert("保存成功！");
+            }
         }
         else{
+            
             const url = urlHeader + '/updateUser';
             const headers = {
                 "Content-Type": "application/json",
@@ -91,7 +115,7 @@ async function save() {
     }
     else {
         const url = urlHeader + '/updateUser';
-        var formData = new FormData();
+        const formData = new FormData();
 
         // 將普通字段添加到 FormData
         formData.append("user", user);
