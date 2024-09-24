@@ -96,11 +96,10 @@ server.post("/signUpUser", urlencodedParser, async (req, res) => {
         const address = req.body.address;
         const name = req.body.name;
         const phone = req.body.phone;
-        const gift = false;
         const get = "";
         const hasGone = false;
 
-        const query = { num: newNum, user: user, password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, get: get, gift: gift, hasGone: hasGone };
+        const query = { num: newNum, user: user, password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, get: get, hasGone: hasGone };
         const insertResult = await list.insertOne(query);
         await client.close();
         return res.status(200).json(insertResult);
@@ -123,15 +122,12 @@ server.post("/updateUser", urlencodedParser, async (req, res) => {
         const address = req.body.address;
         const name = req.body.name;
         const phone = req.body.phone;
-        const gift = Boolean(req.body.gift);
 
         const search = { user: user };
-        const query = { $set: { password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone, gift: gift } };
+        const query = { $set: { password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone} };
         const updateResult = await list.updateOne(search, query);
         await client.close();
 
-        const file = req.file;
-        // console.log(file.filename);
         return res.status(200).json(updateResult);
     } catch (error) {
         return res.status(500).json({
