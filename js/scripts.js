@@ -48,6 +48,7 @@ async function save() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phoneNum").value;
     const file = document.getElementById("giftCheck");
+    const gift = true;
 
     const giftFile = file.files[0];
     if (!giftFile) {
