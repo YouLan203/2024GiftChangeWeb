@@ -10,6 +10,11 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"><!--修改icon-->
     <link href="/css/home_style.css" rel="stylesheet" type="text/css"><!--導入CSS樣式文件-->
     <script type="text/javascript" src="js/scripts.js"></script><!--導入JS文件-->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
     <title>2024 交換禮物大作戰_個人資料</title>
 </head>
 
@@ -46,10 +51,10 @@
                     document.getElementById("name").value = personData.name;
                     document.getElementById("phoneNum").value = personData.phone;
 
-                    const check = personData.get;
-                    if (check != "") {
+                    const check = personData.hasGone;
+                    if (check) {
                         async function showData() {
-                            const url = urlHeader + `/getNumSelect?num=${check}`;
+                            const url = urlHeader + `/getGiftNumSelect?num=${personData.num}`;
                             const res = await fetch(url, {
                                 method: 'GET',
                             })
@@ -70,14 +75,38 @@
             </script>
         </div>
         <div class="clear"></div>
-        <div class="goGift">
-            <button type="button" class="go" onclick="go()">抽!!!</button>
-        </div>
+        <button type="button" class="go" onclick="go()" id="openLightboxBtn">抽!!!</button>
+        <a id="fancyboxLink" href="image/gift.gif" data-fancybox="gallery" style="display: none;">
+            <img src="image/gift.gif" alt="image">
+        </a>
     </main>
     <div class="clear"></div>
     <footer>
         <a href="index.html">回首頁</a>
     </footer>
+    <!-- <script>
+        $(document).ready(async function () {
+            const user = document.getElementById("username").value;
+            const url = urlHeader + `/getUserSelect?user=${user}`;
+            const res = await fetch(url, {
+                method: 'GET',
+            })
+            const personData = await res.json(); //取得當前使用者的資料
+            if (personData.get == "") { //確定還沒抽禮物
+                // 當按下按鈕時，觸發 FancyBox
+                $("#openLightboxBtn").click(function () {
+                    $("#fancyboxLink").trigger('click'); // 觸發 FancyBox 顯示燈箱
+                });
+
+                $("[data-fancybox]").fancybox({
+                    afterClose: function () {
+                        // 燈箱關閉後顯示 alert 訊息
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    </script> -->
 </body>
 
 </html>

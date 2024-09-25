@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightbox Example</title>
+    <!-- 引入 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- 引入 FancyBox 的 CSS 和 JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+    <style>
+        #openLightboxBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- 按鈕來觸發燈箱 -->
+    <button id="openLightboxBtn">顯示圖片</button>
+
+    <!-- 圖片的連結，用來觸發 FancyBox -->
+    <a id="fancyboxLink" href="image/gift.gif" data-fancybox="gallery" style="display: none;">
+        <img src="image/gift.gif" alt="image">
+    </a>
+
+    <!-- 引入 lightbox.js -->
+    <script src="js/test2.js"></script>
+</body>
+</html>

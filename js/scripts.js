@@ -33,9 +33,33 @@ async function login() {
     }
 }
 
+async function go() {
+    // const user = document.getElementById("username").value;
+    // const url = urlHeader + `/getUserSelect?user=${user}`;
+    // const res = await fetch(url, {
+    //     method: 'GET',
+    // })
+    // const personData = await res.json(); //取得當前使用者的資料
+    // if (personData.get == "") { //確定還沒抽禮物
+    //     const url = urlHeader + `/getGift?user=${user}`; //抽取禮物
+    //     const res = await fetch(url, {
+    //         method: 'GET',
+    //     })
+    //     const personData = await res.json();
+    //     console.log(personData);
 
+    //     const url2 = urlHeader + `/getNumSelect?num=${personData.get}`; //取得被抽中者的名字
+    //     const res2 = await fetch(url2, {
+    //         method: 'GET',
+    //     })
+    //     const giftData = await res2.json();
+    //     sessionStorage.setItem('personData', JSON.stringify(personData));
+    //     window.alert("恭喜您抽中" + giftData.nickname + "的禮物！");
+    // }
+    // else {
+    //     window.alert("您已抽過禮物！");
+    // }
 
-function go() {
     window.alert("尚未到抽獎時間！");
 }
 

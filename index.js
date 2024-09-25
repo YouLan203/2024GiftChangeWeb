@@ -66,6 +66,24 @@ server.get("/getUserSelect", async (req, res) => {
 
 })
 
+server.get("/getGiftNumSelect", async (req, res) => {
+    try {
+        const [client, list] = await connectDB("PeopleList");
+
+        const search = req.query.num;
+        const query = { get: search };
+        const person = await list.findOne(query);
+        await client.close();
+        return res.status(200).json(person);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+
+})
+
+
 server.get("/getNumSelect", async (req, res) => {
     try {
         const [client, list] = await connectDB("PeopleList");
@@ -124,7 +142,7 @@ server.post("/updateUser", urlencodedParser, async (req, res) => {
         const phone = req.body.phone;
 
         const search = { user: user };
-        const query = { $set: { password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone} };
+        const query = { $set: { password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone } };
         const updateResult = await list.updateOne(search, query);
         await client.close();
 
@@ -148,18 +166,40 @@ server.get("/getGift", async (req, res) => {
             const query = { num: search };
             const person = await list.findOne(query);
             if (!person.hasGone) { //如果該編號還沒被抽中
-                giftArr[i] = String.fromCharCode(i + 65); //加入未抽中名單中
+                giftArr.push(String.fromCharCode(i + 65)); //加入未抽中名單中
             }
         }
-        await client.close();
-
-
+        // console.log(giftArr);
         let x = Math.floor(Math.random() * giftArr.length); //隨機取值
-        /*這裡需要寫入更改資料庫資料的東東*/
+        let getNum = giftArr[x];
+
+        //要防呆 確定不是抽到自己的
+        const user = req.query.user;
+        const search = { user: user }; //搜尋要改的資料
+        const mydata = await list.findOne(search);
+        while (mydata.num == getNum) {
+            x = Math.floor(Math.random() * giftArr.length); //隨機取值
+            getNum = giftArr[x];
+        }
+        // console.log(getNum);
+
+        const query = { $set: { get: getNum } }; //更新獲得的禮物
+        const updateResult = await list.updateOne(search, query);
+
+        console.log(updateResult.acknowledged);
+        //將被抽中的人改變hasGone
+        const search2 = { num: getNum };
+        const query2 = { $set: { hasGone: true } };
+        const goneReult = await list.updateOne(search2, query2);
+        console.log(goneReult.acknowledged);
+
+        const findUser = { user: user }; //重新獲得使用者的資料(已更新版)
+        const personData = await list.findOne(findUser);
+        await client.close();
         // console.log(giftArr[x]);
-        giftArr.splice(x,1); //將已被抽中的刪掉(其實好像可以不需要)
-        console.log(giftArr);
-        return res.status(200).json(giftArr);
+        // giftArr.splice(x,1); //將已被抽中的刪掉(其實好像可以不需要)
+        // console.log(updateResult);
+        return res.status(200).json(personData);
     } catch (error) {
         return res.status(500).json({
             result: null
