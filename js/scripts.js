@@ -1,10 +1,10 @@
 const urlHeader = "."
 
-function signJump() {
+function signJump() { //跳轉到註冊頁面
     window.location.href = "/signUp.html";
 }
 
-async function login() {
+async function login() { //登入
     const user = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
@@ -17,8 +17,14 @@ async function login() {
         if (personData != null) {
             const passwordCheck = personData.password;
             if (passwordCheck == password) {
-                sessionStorage.setItem('personData', JSON.stringify(personData));
-                window.location.href = "/home.html";
+                if (user == "123") {
+                    sessionStorage.setItem('personData', JSON.stringify(personData));
+                    window.location.href = "/manager.html";
+                }
+                else {
+                    sessionStorage.setItem('personData', JSON.stringify(personData));
+                    window.location.href = "/home.html";
+                }
             }
             else {
                 window.alert("帳號或密碼錯誤！");
@@ -33,7 +39,7 @@ async function login() {
     }
 }
 
-async function go() {
+async function go() { //抽禮物
     // const user = document.getElementById("username").value;
     // const url = urlHeader + `/getUserSelect?user=${user}`;
     // const res = await fetch(url, {
@@ -63,7 +69,7 @@ async function go() {
     window.alert("尚未到抽獎時間！");
 }
 
-async function save() {
+async function save() { //使用者更新自己資料
     const user = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const nickname = document.getElementById("id").value;
@@ -100,7 +106,32 @@ async function save() {
 
 }
 
-async function build() {
+async function managerUpdate() { //管理員更新自己資料
+    const user = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const url = urlHeader + '/updateManager';
+    const headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+    const body = {
+        "user": user,
+        "password": password
+    }
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    })
+    const updateResult = await res.json();
+    console.log(updateResult);
+    if (updateResult.acknowledged == true) {
+        window.alert("保存成功！");
+    }
+}
+
+async function build() { //新使用者建立資料
     const user = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const nickname = document.getElementById("id").value;
@@ -157,4 +188,60 @@ async function build() {
             }
         }
     }
+}
+
+async function saveUser(button) { //管理者更新使用者資料
+    // 獲取按鈕所在的行
+    const row = button.parentElement.parentElement;
+    
+    // 抓取該行的所有 <td>，排除最後一個帶有按鈕的 <td>
+    const cells = row.querySelectorAll('td:not(:last-child)');
+
+    // 構建要保存的資料物件
+    const body = {
+        "num": cells[0].textContent.trim(),
+        "user": cells[1].textContent.trim(),
+        "password": cells[2].textContent.trim(),
+        "nickname": cells[3].textContent.trim(),
+        "postCode": cells[4].textContent.trim(),
+        "address": cells[5].textContent.trim(),
+        "name": cells[6].textContent.trim(),
+        "phone": cells[7].textContent.trim(),
+        "get": cells[8].textContent.trim(),
+        "hasGone": cells[9].textContent.trim(),
+    };
+    console.log(body);
+
+    const url = urlHeader + '/updateUser';
+    const headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    })
+    const updateResult = await res.json();
+    console.log(updateResult.acknowledged);
+    if (updateResult.acknowledged == true) {
+        window.alert("保存成功！");
+    }
+    window.location.reload();
+}
+
+async function deleteUser(button){ //管理者刪除使用者資料
+    const row = button.parentElement.parentElement;
+    
+    // 抓取該行第一個<td>
+    const cell = row.querySelector('td').textContent.trim();
+    console.log(cell);
+
+    const url = urlHeader + `/deleteUser?num=${cell}`;
+    const res = await fetch(url, {
+        method: 'GET',
+    })
+    const result = await res.json();
+    console.log(result);
+    window.location.reload();
 }

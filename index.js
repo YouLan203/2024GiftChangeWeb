@@ -27,7 +27,7 @@ server.listen(port, () => console.log(`Listening on ${port}`))
 
 const uri = process.env.DB_Password;
 
-async function connectDB(DB) {
+async function connectDB(DB) { //用來連線資料庫的
     const { MongoClient, ServerApiVersion } = require('mongodb');
 
     // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -49,7 +49,7 @@ async function connectDB(DB) {
 }
 
 
-server.get("/getUserSelect", async (req, res) => {
+server.get("/getUserSelect", async (req, res) => { //用在login確認帳號密碼是否正確
     try {
         const [client, list] = await connectDB("PeopleList");
 
@@ -66,7 +66,7 @@ server.get("/getUserSelect", async (req, res) => {
 
 })
 
-server.get("/getGiftNumSelect", async (req, res) => {
+server.get("/getGiftNumSelect", async (req, res) => { //用在寫在home.html顯示收件人資料的
     try {
         const [client, list] = await connectDB("PeopleList");
 
@@ -83,8 +83,21 @@ server.get("/getGiftNumSelect", async (req, res) => {
 
 })
 
+server.get("/getData", async (req, res) => { //用在管理者頁面顯示所有參與者資料的
+    try {
+        const [client, list] = await connectDB("PeopleList");
 
-server.get("/getNumSelect", async (req, res) => {
+        const data = await list.find({}).skip(1).toArray();
+        await client.close();
+        return res.status(200).json(data);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+})
+
+server.get("/getNumSelect", async (req, res) => { //用在抽獎時顯示抽到誰的
     try {
         const [client, list] = await connectDB("PeopleList");
 
@@ -101,7 +114,7 @@ server.get("/getNumSelect", async (req, res) => {
 
 })
 
-server.post("/signUpUser", urlencodedParser, async (req, res) => {
+server.post("/signUpUser", urlencodedParser, async (req, res) => { //就是建立新的資料
     try {
         const [client, list] = await connectDB("PeopleList");
 
@@ -129,7 +142,7 @@ server.post("/signUpUser", urlencodedParser, async (req, res) => {
 
 })
 
-server.post("/updateUser", urlencodedParser, async (req, res) => {
+server.post("/updateUser", urlencodedParser, async (req, res) => { //使用者用來自己更新自己資料的
     try {
         const [client, list] = await connectDB("PeopleList");
 
@@ -155,7 +168,81 @@ server.post("/updateUser", urlencodedParser, async (req, res) => {
 
 });
 
-server.get("/getGift", async (req, res) => {
+server.post("/managerUpdateUser", urlencodedParser, async (req, res) => { //管理員用來更新使用者資料的
+    try {
+        const [client, list] = await connectDB("PeopleList");
+
+        const num = req.body.num;
+        const user = req.body.user;
+        const password = req.body.password;
+        const nickname = req.body.nickname;
+        const postCode = req.body.postCode;
+        const address = req.body.address;
+        const name = req.body.name;
+        const phone = req.body.phone;
+
+        const search = { num: num };
+        const query = { $set: { user: user, password: password, nickname: nickname, postCode: postCode, address: address, name: name, phone: phone } };
+        const updateResult = await list.updateOne(search, query);
+        await client.close();
+
+        return res.status(200).json(updateResult);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+});
+
+server.get("/deleteUser", async (req, res) => { //用在管理者刪除使用者
+    try {
+        const [client, list] = await connectDB("PeopleList");
+
+        const search = req.query.num;
+        const deleteResult = await list.deleteOne({ num: search });
+        console.log(deleteResult.acknowledged);
+
+        const data = await list.find({}).skip(1).toArray(); //獲得所有使用者資料(除了管理員)
+        for (i = 0; i < data.length ; i++){ //重新將每個人的編號進行編碼
+            const search_user = data[i].user;
+            const newNum = String.fromCharCode(i + 65);
+            const person = { user: search_user }
+            const query = { $set: { num: newNum }};
+            const updateResult = await list.updateOne(person, query);
+            console.log(data[i].nickname, updateResult.acknowledged);
+        }
+        const newData = await list.find({}).skip(1).toArray();
+        await client.close();
+        return res.status(200).json(newData);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+});
+
+server.post("/updateManager", urlencodedParser, async (req, res) => { //管理員用來更新自己密碼的
+    try {
+        const [client, list] = await connectDB("PeopleList");
+
+        const user = req.body.user;
+        const password = req.body.password;
+
+        const search = { user: user };
+        const query = { $set: { password: password } };
+        const updateResult = await list.updateOne(search, query);
+        await client.close();
+
+        return res.status(200).json(updateResult);
+    } catch (error) {
+        return res.status(500).json({
+            result: null
+        })
+    }
+
+});
+
+server.get("/getGift", async (req, res) => { //抽禮物要用到的
     try {
         const [client, list] = await connectDB("PeopleList");
 

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="管理員的專屬頁面！~(=^‥^)ノ">
+    <meta name="author" content="UU">
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"><!--修改icon-->
+    <link href="/css/manager_style.css" rel="stylesheet" type="text/css"><!--導入CSS樣式文件-->
+    <script type="text/javascript" src="js/scripts.js"></script><!--導入JS文件-->
+
+    <title>2024 交換禮物大作戰_管理介面</title>
+</head>
+
+<body>
+    <header>
+        <h1>2024 聖誕交換禮物大作戰!!!╰(*°▽°*)╯</h1>
+    </header>
+    <main>
+        <div class="data">
+            <div id="myData">
+                <div class="left">
+                    <form id="myData">
+                        <p>帳號：<input type="text" id="username" placeholder="帳號"></p>
+                        <p>密碼：<input type="text" id="password" placeholder="密碼"></p>
+                    </form>
+                </div>
+                <div class="right" id="right">
+                    <button type="button" class="update" onclick="managerUpdate()">更新</button>
+                </div>
+            </div>
+            <table id="dataTable">
+                <thead class="tableHead">
+                    <td>編號</td>
+                    <td>帳號</td>
+                    <td>密碼</td>
+                    <td>暱稱</td>
+                    <td>郵遞區號</td>
+                    <td>地址</td>
+                    <td>收件人姓名</td>
+                    <td>手機</td>
+                    <td>抽中誰</td>
+                    <td>被抽走沒</td>
+                    <td>編輯/刪除</td>
+                </thead>
+                <tbody class="tableBody"></tbody>
+            </table>
+            <script>
+                const personData = JSON.parse(sessionStorage.getItem('personData'));
+                if (personData) {
+                    document.getElementById("username").value = personData.user;
+                    document.getElementById("username").readOnly = true;
+                    document.getElementById("password").value = personData.password;
+                }
+
+                async function fetchData() {
+                    try {
+                        const response = await fetch('./getData', {
+                            method: 'GET',
+                        });
+                        const data = await response.json();
+
+                        // 將資料顯示在表格中
+                        const tableBody = document.querySelector('#dataTable tbody');
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+
+                            // 將每個欄位放入表格的列
+                            row.innerHTML = `
+                        <td>${item.num}</td>
+                        <td contenteditable="true">${item.user}</td>
+                        <td contenteditable="true">${item.password}</td>
+                        <td contenteditable="true">${item.nickname}</td>
+                        <td contenteditable="true">${item.postCode}</td>
+                        <td contenteditable="true">${item.address}</td>
+                        <td contenteditable="true">${item.name}</td>
+                        <td contenteditable="true">${item.phone}</td>
+                        <td contenteditable="true">${item.get}</td>
+                        <td contenteditable="true">${item.hasGone}</td>
+                        <td><button type="button" onclick="saveUser(this)">保存</button><button type="button" onclick="deleteUser(this)">刪除</button></td>
+                        <!-- 添加其他欄位 -->
+                    `;
+
+                            tableBody.appendChild(row);
+                        });
+                    } catch (error) {
+                        console.error('無法取得資料', error);
+                    }
+                }
+
+                // 頁面載入時呼叫 fetchData 函數
+                window.onload = fetchData();
+            </script>
+        </div>
+        <div class="clear"></div>
+    </main>
+    <div class="clear"></div>
+    <footer>
+        <a href="index.html">回首頁</a>
+    </footer>
+</body>
+
+</html>

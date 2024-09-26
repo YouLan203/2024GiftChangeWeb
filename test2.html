@@ -3,32 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lightbox Example</title>
-    <!-- 引入 jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- 引入 FancyBox 的 CSS 和 JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-
+    <title>可輸入資料的表格</title>
     <style>
-        #openLightboxBtn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        input {
+            width: 95%;
+            padding: 5px;
         }
     </style>
 </head>
 <body>
-    <!-- 按鈕來觸發燈箱 -->
-    <button id="openLightboxBtn">顯示圖片</button>
-
-    <!-- 圖片的連結，用來觸發 FancyBox -->
-    <a id="fancyboxLink" href="image/gift.gif" data-fancybox="gallery" style="display: none;">
-        <img src="image/gift.gif" alt="image">
-    </a>
-
-    <!-- 引入 lightbox.js -->
-    <script src="js/test2.js"></script>
+    <h1 style="text-align: center;">輸入資料的表格</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>項目</th>
+                <th>內容</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>姓名</td>
+                <td><input type="text" name="name" placeholder="請輸入姓名"></td>
+            </tr>
+            <tr>
+                <td>年齡</td>
+                <td><input type="number" name="age" placeholder="請輸入年齡"></td>
+            </tr>
+            <tr>
+                <td>電子郵件</td>
+                <td><input type="email" name="email" placeholder="請輸入電子郵件"></td>
+            </tr>
+            <tr>
+                <td>地址</td>
+                <td><input type="text" name="address" placeholder="請輸入地址"></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
